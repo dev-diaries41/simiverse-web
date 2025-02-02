@@ -13,10 +13,8 @@ const backgroundImages = [
 export function useSimulation() {
     const defaultEnv:SurvivalEnvironment = {
       year: 0,
-      globalPopulation: 8_000_000_000,
-      globalResources: { food: 1_000, energy: 1_000, water: 1_000 },
       contributionFactor: 0.05,
-      resourceDepletionRate: { food: 20, energy: 15, water: 10 },
+      resourceDepletionRate: { food: 0.020, energy: 0.015, water: 0.010 },
       defectGainFactor: 0.1, 
       isGlobalCollapse: false,
     };
@@ -30,17 +28,17 @@ export function useSimulation() {
     const [shouldUpdateBackgroud, setShouldUpdateBackground] = useState(false);
     const [aiBackgroundImgUrl, setAIBackgroundImgUrl] = useState<string|null>(null);
 
-    useEffect(() => {
-      const updateBackgroud = async() => {
-        const imageUrl = await generateImage("A dramatic space scene depicting a desolate Earth in the distance, with visible signs of resource depletion such as dim lights, barren landscapes, and reduced atmospheric glow. The foreground features a cosmic setting with an ominous dark nebula and scattered asteroid fragments, symbolizing the collapse of global resources. The colors should be dark and somber, emphasizing urgency and survival challenges in a futuristic and immersive style.");
-        console.log({imageUrl})
+    // useEffect(() => {
+    //   const updateBackgroud = async() => {
+    //     const imageUrl = await generateImage("A dramatic space scene depicting a desolate Earth in the distance, with visible signs of resource depletion such as dim lights, barren landscapes, and reduced atmospheric glow. The foreground features a cosmic setting with an ominous dark nebula and scattered asteroid fragments, symbolizing the collapse of global resources. The colors should be dark and somber, emphasizing urgency and survival challenges in a futuristic and immersive style.");
+    //     console.log({imageUrl})
 
-        setAIBackgroundImgUrl(imageUrl)
-      }
-      if(shouldUpdateBackgroud){
-        updateBackgroud()
-      }
-    }, [shouldUpdateBackgroud])
+    //     setAIBackgroundImgUrl(imageUrl)
+    //   }
+    //   if(shouldUpdateBackgroud){
+    //     updateBackgroud()
+    //   }
+    // }, [shouldUpdateBackgroud])
 
     const updateInitialState = (newInitialState: SurvivalEnvironment) => {
       setEnvOpts(newInitialState);
@@ -138,15 +136,15 @@ const onSimulationComplete = async(finalEnvironment: SurvivalEnvironment) => {
       }
     };
 
-    const calculateStats = (outcomes: SurvivalStats[], envOpts: SurvivalEnvironment) =>{
+    const calculateStats = (outcomes: SurvivalStats[]) =>{
       const calculateCurrentStats = (index: number) => [
           { label: 'Cooperations', value: outcomes.slice(0, index).reduce((total, outcome) => total + (outcome.cooperations || 0), 0) },
           { label: 'Defects', value: outcomes.slice(0, index).reduce((total, outcome) => total + (outcome.defections || 0), 0) },
           { label: 'Nations', value: outcomes[index - 1]?.activeNations?? 0 },
-          { label: 'Food', value: outcomes[index - 1]?.globalResources?.food ?? envOpts.globalResources.food },
-          { label: 'Water', value: outcomes[index - 1]?.globalResources?.water ?? envOpts.globalResources.water },
-          { label: 'Energy', value: outcomes[index - 1]?.globalResources?.energy ?? envOpts.globalResources.energy },
-          { label: 'Population', value: outcomes[index - 1]?.globalPopulation ?? envOpts.globalPopulation }          
+          { label: 'Food', value: outcomes[index - 1]?.globalResources?.food ?? 0 },
+          { label: 'Water', value: outcomes[index - 1]?.globalResources?.water ?? 0 },
+          { label: 'Energy', value: outcomes[index - 1]?.globalResources?.energy ?? 0 },
+          { label: 'Population', value: outcomes[index - 1]?.globalPopulation ?? 0 }          
       ];
   
       const stats = calculateCurrentStats(outcomes.length);
@@ -155,7 +153,7 @@ const onSimulationComplete = async(finalEnvironment: SurvivalEnvironment) => {
       return { stats, prevStats };
   }
 
-  const {prevStats,stats} = React.useMemo(() => calculateStats(outcomes, envOpts), [outcomes]);
+  const {prevStats,stats} = React.useMemo(() => calculateStats(outcomes), [outcomes]);
 
     return {
       envOpts,

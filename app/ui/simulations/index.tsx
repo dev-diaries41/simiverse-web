@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { useSimulation } from '@/app/hooks/useSimulation';
 import Globe from './globe';
 import ControlMenu from '../common/control-menu';
@@ -11,7 +11,8 @@ import Stats from './stats';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlayCircle } from '@fortawesome/free-solid-svg-icons';
 import { useLoading } from '@/app/hooks';
-import { useHandLandmarker } from '@/app/hooks/useMediaPipe';
+import { useGesture } from '@/app/hooks/mediapipe/useGesture';
+import { GestureType } from '@/app/types';
 
 const backgroundImages = [
   '/background.jpg',
@@ -20,7 +21,6 @@ const backgroundImages = [
 
 export default function Simulation() {
   const {
-    envOpts,
     outcomes,
     isRunning,
     prevStats,
@@ -36,8 +36,9 @@ export default function Simulation() {
   const { actions, isMinimized, isDataPanelVisible, toggleDataPanel } = useControlMenu();
   const globeContainerRef = useRef<HTMLDivElement | null>(null);
   const { loading, setLoading } = useLoading(true);
-  const { canvasRef, videoRef } = useHandLandmarker((landmarks) => {
-    console.log(landmarks);
+  const [gestureType, setGestureType] = useState<GestureType>('None')
+  const { canvasRef, videoRef } = useGesture((result) => {
+    setGestureType(result)
   });
 
 
@@ -66,9 +67,10 @@ export default function Simulation() {
         )}
         <div className="fixed w-full h-screen opacity-80" ref={globeContainerRef}>
           <Globe
+          gestureType={gestureType}
             backgroundUrl={aiBackgroundImgUrl || backgroundImages[0]}
             textureUrl="/earth2.jpg"
-            population={outcomes[outcomes.length - 1]?.globalPopulation ?? envOpts.globalPopulation}
+            population={outcomes[outcomes.length - 1]?.globalPopulation ?? 0}
             onReady={(scene, camera) => {
               setTimeout(() => setLoading(false), 1000);
             }}
@@ -107,7 +109,7 @@ export default function Simulation() {
           </button>
         </form>
       </ControlMenu>
-      {/* <video
+      <video
         ref={videoRef}
         width={320}
         height={240}
@@ -124,7 +126,7 @@ export default function Simulation() {
         style={{
           pointerEvents: 'none',
         }}
-      /> */}
+      />
       {showSettings && <Settings />}
     </div>
   );

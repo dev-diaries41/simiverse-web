@@ -321,3 +321,14 @@ export interface ThreeSceneProps {
   textureUrl?: string;
   backgroundUrl?: string
 }
+
+// Allowed gesture labels.
+export type GestureType =
+  | "None"
+  | "Closed_Fist"
+  | "Open_Palm"
+  | "Pointing_Up"
+  | "Thumb_Down"
+  | "Thumb_Up"
+  | "Victory"
+  | "ILoveYou";

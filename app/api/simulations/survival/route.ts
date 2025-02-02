@@ -16,6 +16,7 @@ export async function POST(req: NextRequest) {
       async start(controller) {
         const onStepComplete = (outcome: StepOutcome<SurvivalStats>) => {
           const message = `data: ${JSON.stringify({ outcome })}\n\n`;
+          console.log(outcome)
           controller.enqueue(message);
         };
 

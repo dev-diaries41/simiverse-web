@@ -5,6 +5,9 @@ import { SettingCategory, type Settings } from '@/app/types';
 import React from 'react';
 import Switch from './switch';
 import { SimulationType, SimulationConfig } from 'simiverse';
+import * as THREE from "three";
+import { update } from "@tweenjs/tween.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 
 

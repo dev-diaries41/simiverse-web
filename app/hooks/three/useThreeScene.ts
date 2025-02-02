@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { Tween, Easing } from "@tweenjs/tween.js";
 
 export const useThreeScene = ({
   width,
@@ -39,6 +38,17 @@ export const useThreeScene = ({
     const camera = new THREE.PerspectiveCamera(75, sceneWidth / sceneHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     const controls = new OrbitControls(camera, renderer.domElement);
+    
+    camera.position.z = 10; // Default camera position
+  
+    controls.keys = {
+      LEFT: 'ArrowLeft',
+      RIGHT: 'ArrowRight',
+      UP: 'ArrowUp',
+      BOTTOM: 'ArrowDown',
+    }
+
+    controls.listenToKeyEvents(window)
 
     // Save references
     sceneRef.current = scene;
@@ -52,8 +62,6 @@ export const useThreeScene = ({
     if (mountRef.current) {
       mountRef.current.appendChild(renderer.domElement);
     }
-
-    camera.position.z = 10; // Default camera position
 
     // Configure OrbitControls
     controls.enableDamping = true;
