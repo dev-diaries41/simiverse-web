@@ -35,7 +35,7 @@ const Globe: React.FC<GlobeProps> = React.memo(
       textureUrl,
     });
 
-    const { mountRef, controls } = useThreeScene({
+    const { mountRef, controls, camera } = useThreeScene({
       width,
       height,
       onInitScene: initScene,
@@ -43,7 +43,7 @@ const Globe: React.FC<GlobeProps> = React.memo(
       onReady,
     });
 
-    useGestureOrbitControls(controls, gestureType)
+    useGestureOrbitControls(controls, gestureType, camera)
     
     return (
       <div

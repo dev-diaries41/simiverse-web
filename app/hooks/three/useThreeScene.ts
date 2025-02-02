@@ -5,10 +5,10 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 export const useThreeScene = ({
   width,
   height,
-  onInitScene, // Callback for scene initialization
-  onAnimate, // Callback for animation logic
+  onInitScene,
+  onAnimate, 
   onReady, // Callback for when the scene and camera are ready
-  onDispose, // Callback for cleanup
+  onDispose, 
 }: {
   width?: number;
   height?: number;
@@ -17,9 +17,9 @@ export const useThreeScene = ({
     camera: THREE.PerspectiveCamera,
     controls: OrbitControls
   ) => void; // Function to initialize the scene
-  onAnimate?: (delta: number, scene: THREE.Scene, camera: THREE.PerspectiveCamera) => void; // Animation callback
-  onReady?: (scene: THREE.Scene, camera: THREE.PerspectiveCamera) => void; // Callback for when the scene is ready
-  onDispose?: (scene: THREE.Scene, camera: THREE.PerspectiveCamera) => void; // Cleanup callback
+  onAnimate?: (delta: number, scene: THREE.Scene, camera: THREE.PerspectiveCamera) => void; 
+  onReady?: (scene: THREE.Scene, camera: THREE.PerspectiveCamera) => void; 
+  onDispose?: (scene: THREE.Scene, camera: THREE.PerspectiveCamera) => void; 
 }) => {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
