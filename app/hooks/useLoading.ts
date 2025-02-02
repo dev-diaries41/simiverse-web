@@ -1,7 +1,5 @@
 import React, {useLayoutEffect, useState } from 'react'
 
-// Custom loading hook
-// The minimize variable and minimizeLoader can be used to optionally hide the loader
 const useLoading = (defaultState: boolean = false) => {
     const [loading, setLoading] = useState(defaultState);
     const [minimize, setMinimize] = useState(false);
@@ -13,7 +11,6 @@ const useLoading = (defaultState: boolean = false) => {
         setMinimize(true);
     }
 
-    // Set minimize false when loading stops 
     useLayoutEffect(() => {
         if(!loading && minimize){
             setMinimize(false);

@@ -1,7 +1,6 @@
 import { useRef, useLayoutEffect, useCallback } from "react";
 import * as THREE from "three";
-import { update } from "@tweenjs/tween.js";
-import { useTweenAnimations } from "@/app/hooks/three/useTween";
+import { Easing, Tween, update } from "@tweenjs/tween.js";
 
 interface UseGlobeProps {
   population: number;
@@ -23,7 +22,15 @@ export const useGlobe = ({
   const prevPopulationRef = useRef<number>(population);
   const globeGroupRef = useRef<THREE.Group | null>(null);
   const backgroundMeshRef = useRef<THREE.Mesh | null>(null);
-  const { animateZoom } = useTweenAnimations();
+
+  const animateZoom = (camera: THREE.PerspectiveCamera, initialZoom: number, targetZoom: number, duration = 1500) => {
+    camera.position.z = initialZoom;
+
+    new Tween(camera.position)
+      .to({ z: targetZoom }, duration)
+      .easing(Easing.Cubic.Out)
+      .start();
+  };
 
   // Function to generate dots for the population
   const generateDots = useCallback((numDots: number) => {

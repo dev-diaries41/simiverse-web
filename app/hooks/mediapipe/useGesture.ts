@@ -3,7 +3,7 @@ import { GestureRecognizer } from "@mediapipe/tasks-vision";
 import { createGestureRecognizer, processGestureVideo } from "../../lib/mediapipe";
 
 export const useGesture = (
-    onHandDetected: ({categoryName, displayName}: any) => void) => {
+    onHandDetected: (categoryName: any) => void) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const gestureRecognizerRef = useRef<GestureRecognizer | null>(null);
