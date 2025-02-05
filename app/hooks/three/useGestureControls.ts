@@ -5,7 +5,14 @@ import { OrbitControls } from "three/examples/jsm/Addons.js";
 import * as TWEEN from "@tweenjs/tween.js";
 
 
-export function useGestureOrbitControls(controls: OrbitControls | null, gestureTypes: GestureType[], camera: PerspectiveCamera | null) {
+interface UseGestureOrbitControlsProps {
+  controls: OrbitControls | null, gestureTypes: GestureType[], camera: PerspectiveCamera | null
+}
+export function useGestureOrbitControls({
+  controls,
+  gestureTypes,
+  camera
+}: UseGestureOrbitControlsProps) {
   const activeKey = useRef<string | null>(null);
   const keyInterval = useRef<NodeJS.Timeout | null>(null);
 

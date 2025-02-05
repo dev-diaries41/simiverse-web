@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useSimulation } from '@/app/hooks/useSimulation';
 import Globe from './globe';
 import ControlMenu from '../common/control-menu';
@@ -37,13 +37,18 @@ export default function Simulation() {
   const globeContainerRef = useRef<HTMLDivElement | null>(null);
   const { loading, setLoading } = useLoading(true);
   const [gestureTypes, setGestureTypes] = useState<GestureType[]>([])
+  const isStartSimGesuture = gestureTypes[0] === 'Open_Palm' && gestureTypes[1] === 'Open_Palm'
+
+  useEffect(() => {
+    if(isStartSimGesuture && !isRunning){
+      reset();
+      startSimulation();
+    }
+  }, [isStartSimGesuture]);
+
   const { canvasRef, videoRef } = useGesture({
     onHandDetected: (result) => {
       setGestureTypes(result);
-      if(result[0] === 'Open_Palm' && result[1] === 'Open_Palm' && !isRunning){
-        reset();
-        startSimulation();      
-      }
     }
   });
 
@@ -73,7 +78,7 @@ export default function Simulation() {
         )}
         <div className="fixed w-full h-screen opacity-80" ref={globeContainerRef}>
           <Globe
-          gestureTypes={gestureTypes}
+            gestureTypes={gestureTypes}
             backgroundUrl={aiBackgroundImgUrl || backgroundImages[0]}
             textureUrl="/earth2.jpg"
             population={outcomes[outcomes.length - 1]?.globalPopulation ?? 0}

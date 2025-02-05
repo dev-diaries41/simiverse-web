@@ -1,19 +1,18 @@
 import React, { useEffect } from "react";
 import { useThreeScene } from "@/app/hooks/three/useThreeScene";
 import { useGlobe } from "@/app/hooks/three/useGlobe";
-import { ThreeSceneProps, GestureType } from "@/app/types";
+import { ThreeProps, GestureType } from "@/app/types";
 import { MOUSE, PerspectiveCamera, Scene, TOUCH } from "three";
 import { useGestureOrbitControls } from "@/app/hooks/three/useGestureControls";
 
 
 
-interface GlobeProps extends ThreeSceneProps {
+interface GlobeProps extends ThreeProps {
   population: number;
   width?: number;
   height?: number;
   rotationSpeed?: number;
   onReady?: (scene: Scene, camera: PerspectiveCamera) => void;
-  /** Determines the current gesture action */
   gestureTypes?: GestureType[];
 }
 
@@ -25,8 +24,8 @@ const Globe: React.FC<GlobeProps> = React.memo(
     rotationSpeed = 0.005,
     backgroundUrl,
     textureUrl,
-    onReady,
     gestureTypes = [],
+    onReady,
   }) => {
     const { initScene, animateScene } = useGlobe({
       population,
@@ -43,7 +42,7 @@ const Globe: React.FC<GlobeProps> = React.memo(
       onReady,
     });
 
-    useGestureOrbitControls(controls, gestureTypes, camera)
+    useGestureOrbitControls({controls, gestureTypes, camera})
     
     return (
       <div

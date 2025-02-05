@@ -317,7 +317,7 @@ export interface ActionItem {
 }
 
 
-export interface ThreeSceneProps {
+export interface ThreeProps {
   textureUrl?: string;
   backgroundUrl?: string
 }
