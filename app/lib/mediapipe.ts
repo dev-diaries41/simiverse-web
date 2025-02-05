@@ -94,6 +94,7 @@ export async function createGestureRecognizer(gestureRecognizerOptions: GestureR
 
     return gestureRecognizer;
 }
+
 export async function processGestureVideo ({ 
   gestureRecognizer, 
   videoElement, 
@@ -105,43 +106,45 @@ export async function processGestureVideo ({
   videoElement: HTMLVideoElement | null;
   canvasElement: HTMLCanvasElement | null;
   isMounted: boolean;
-  onHandDetected: (categoryName: any) => void;
+  onHandDetected: (categoryNames: string[]) => void; // Change to handle multiple gestures
 }) {
   if (gestureRecognizer && videoElement && videoElement.readyState === 4 && isMounted) {
     const ctx = canvasElement?.getContext("2d");
 
     if (ctx && canvasElement) {
-      // Clear canvas first
+      // Clear canvas
       ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+
       const results = gestureRecognizer.recognizeForVideo(videoElement, performance.now());
 
       if (results.gestures.length > 0) {
-        const { categoryName, displayName } = results.gestures[0][0];
+        const detectedGestures: string[] = [];
         const drawingUtils = new DrawingUtils(ctx);
 
-        if (results.landmarks && results.landmarks.length > 0) {
-          for (const landmarks of results.landmarks) {
-            drawingUtils.drawConnectors(
-              landmarks,
-              HandLandmarker.HAND_CONNECTIONS,
-              {
-                color: "#00FF00",
-                radius: 3,
-                lineWidth: 3,
-              }
-            );
-            drawingUtils.drawLandmarks(landmarks, {
-              color: "#00FF00",
-              radius: 3,
-              lineWidth: 3,
-            });
-          }
+        for (let i = 0; i < results.gestures.length; i++) {
+          if (results.gestures[i].length > 0) {
+            const { categoryName } = results.gestures[i][0]; // Get top gesture for this hand
+            detectedGestures.push(categoryName);
 
-          ctx.font = "16px Arial";
-          ctx.fillStyle = "#FF0000";
-          ctx.fillText(categoryName, 10, 30);
-          onHandDetected(categoryName);
+            // Draw hand landmarks
+            if (results.landmarks && results.landmarks[i]) {
+              const landmarks = results.landmarks[i];
+              drawingUtils.drawConnectors(
+                landmarks,
+                HandLandmarker.HAND_CONNECTIONS,
+                { color: "#00FF00", radius: 3, lineWidth: 3 }
+              );
+              drawingUtils.drawLandmarks(landmarks, { color: "#00FF00", radius: 3, lineWidth: 3 });
+
+              // Display text for each hand
+              ctx.font = "16px Arial";
+              ctx.fillStyle = "#FF0000";
+              ctx.fillText(categoryName, 10, 30 + i * 20); // Offset text for multiple hands
+            }
+          }
         }
+
+        onHandDetected(detectedGestures); // Send array of detected gestures
       } else {
         console.warn('No gesture results');
       }
