@@ -14,7 +14,7 @@ interface GlobeProps extends ThreeSceneProps {
   rotationSpeed?: number;
   onReady?: (scene: Scene, camera: PerspectiveCamera) => void;
   /** Determines the current gesture action */
-  gestureType?: GestureType;
+  gestureTypes?: GestureType[];
 }
 
 const Globe: React.FC<GlobeProps> = React.memo(
@@ -26,7 +26,7 @@ const Globe: React.FC<GlobeProps> = React.memo(
     backgroundUrl,
     textureUrl,
     onReady,
-    gestureType = "None",
+    gestureTypes = [],
   }) => {
     const { initScene, animateScene } = useGlobe({
       population,
@@ -43,7 +43,7 @@ const Globe: React.FC<GlobeProps> = React.memo(
       onReady,
     });
 
-    useGestureOrbitControls(controls, gestureType, camera)
+    useGestureOrbitControls(controls, gestureTypes, camera)
     
     return (
       <div

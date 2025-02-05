@@ -1,4 +1,5 @@
 import { DrawingUtils, FilesetResolver, GestureRecognizer, GestureRecognizerOptions, HandLandmarker, HandLandmarkerOptions } from "@mediapipe/tasks-vision";
+import { GestureType } from "../types";
 
 export async function createHandLandMarker(handLandmarkerOptions: HandLandmarkerOptions = {}){
     const vision = await FilesetResolver.forVisionTasks(
@@ -106,7 +107,7 @@ export async function processGestureVideo ({
   videoElement: HTMLVideoElement | null;
   canvasElement: HTMLCanvasElement | null;
   isMounted: boolean;
-  onHandDetected: (categoryNames: string[]) => void; // Change to handle multiple gestures
+  onHandDetected: (categoryNames: GestureType[]) => void; // Change to handle multiple gestures
 }) {
   if (gestureRecognizer && videoElement && videoElement.readyState === 4 && isMounted) {
     const ctx = canvasElement?.getContext("2d");
@@ -118,13 +119,13 @@ export async function processGestureVideo ({
       const results = gestureRecognizer.recognizeForVideo(videoElement, performance.now());
 
       if (results.gestures.length > 0) {
-        const detectedGestures: string[] = [];
+        const detectedGestures: GestureType[] = [];
         const drawingUtils = new DrawingUtils(ctx);
 
         for (let i = 0; i < results.gestures.length; i++) {
           if (results.gestures[i].length > 0) {
             const { categoryName } = results.gestures[i][0]; // Get top gesture for this hand
-            detectedGestures.push(categoryName);
+            detectedGestures.push(categoryName as GestureType);
 
             // Draw hand landmarks
             if (results.landmarks && results.landmarks[i]) {

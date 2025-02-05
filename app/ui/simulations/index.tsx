@@ -36,9 +36,15 @@ export default function Simulation() {
   const { actions, isMinimized, isDataPanelVisible, toggleDataPanel } = useControlMenu();
   const globeContainerRef = useRef<HTMLDivElement | null>(null);
   const { loading, setLoading } = useLoading(true);
-  const [gestureType, setGestureType] = useState<GestureType>('None')
-  const { canvasRef, videoRef } = useGesture((result) => {
-    setGestureType(result)
+  const [gestureTypes, setGestureTypes] = useState<GestureType[]>([])
+  const { canvasRef, videoRef } = useGesture({
+    onHandDetected: (result) => {
+      setGestureTypes(result);
+      if(result[0] === 'Open_Palm' && result[1] === 'Open_Palm'){
+        reset();
+        startSimulation();      
+      }
+    }
   });
 
 
@@ -67,7 +73,7 @@ export default function Simulation() {
         )}
         <div className="fixed w-full h-screen opacity-80" ref={globeContainerRef}>
           <Globe
-          gestureType={gestureType}
+          gestureTypes={gestureTypes}
             backgroundUrl={aiBackgroundImgUrl || backgroundImages[0]}
             textureUrl="/earth2.jpg"
             population={outcomes[outcomes.length - 1]?.globalPopulation ?? 0}

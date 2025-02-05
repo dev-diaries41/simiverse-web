@@ -5,7 +5,7 @@ import { OrbitControls } from "three/examples/jsm/Addons.js";
 import * as TWEEN from "@tweenjs/tween.js";
 
 
-export function useGestureOrbitControls(controls: OrbitControls | null, gestureType: GestureType, camera: PerspectiveCamera | null) {
+export function useGestureOrbitControls(controls: OrbitControls | null, gestureTypes: GestureType[], camera: PerspectiveCamera | null) {
   const activeKey = useRef<string | null>(null);
   const keyInterval = useRef<NodeJS.Timeout | null>(null);
 
@@ -88,7 +88,9 @@ export function useGestureOrbitControls(controls: OrbitControls | null, gestureT
   useEffect(() => {
     if (!controls) return;
 
-    switch (gestureType) {
+    const [gestureTypeOne, gestureTypeTwo] = gestureTypes;
+
+    switch (gestureTypeOne) {
       case "Thumb_Up":
         startHoldingKey("ArrowUp");
         break;
@@ -113,5 +115,5 @@ export function useGestureOrbitControls(controls: OrbitControls | null, gestureT
     }
 
     return () => stopHoldingKey(); 
-  }, [gestureType, controls]);
+  }, [gestureTypes, controls]);
 }

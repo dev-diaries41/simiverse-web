@@ -1,10 +1,14 @@
 import { useEffect, useRef } from "react";
 import { GestureRecognizer } from "@mediapipe/tasks-vision";
 import { createGestureRecognizer, processGestureVideo } from "../../lib/mediapipe";
+import { GestureType } from "@/app/types";
 
-export const useGesture = (
-    onHandDetected: (categoryName: any) => void) => {
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+interface UseGestureProps {
+  onHandDetected: (categoryNames: GestureType[]) => void
+}
+export const useGesture = ({onHandDetected}: UseGestureProps ) => {
+  
+      const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const gestureRecognizerRef = useRef<GestureRecognizer | null>(null);
 
