@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { ActionItem } from '@/app/types';
-import { faInfoCircle, faLayerGroup, faExpand, faSlidersH, faEye, faEyeSlash, faLineChart } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faExpand, faSlidersH, faEye, faEyeSlash, faLineChart } from '@fortawesome/free-solid-svg-icons';
 import { useSettings } from '../providers/settings';
 
 const useControlMenu = () => {
   const [isMinimized, setIsMinimized] = useState(false);
   const { toggleSettings } = useSettings();
   const [isDataPanelVisible, setDataPanelVisible] = useState(false);
+  const [isDataPanelExpanded, setDataPanelExpanded] = useState(false);
 
   const toggleVisibility = () => {
     setIsMinimized(prevState => !prevState);
@@ -16,6 +17,9 @@ const useControlMenu = () => {
     setDataPanelVisible(prev => !prev);
   };
 
+  const toggleDataPanelExpansion = () => {
+    setDataPanelExpanded(prev => !prev);
+  };
   // Actions for control menu
   const actions: ActionItem[] = [
     {
@@ -48,9 +52,11 @@ const useControlMenu = () => {
   return {
     actions,
     isMinimized,
+    isDataPanelVisible,
+    isDataPanelExpanded,
     toggleVisibility,
     toggleDataPanel,
-    isDataPanelVisible,
+    toggleDataPanelExpansion
   };
 };
 

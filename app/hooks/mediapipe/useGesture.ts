@@ -1,18 +1,21 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GestureRecognizer } from "@mediapipe/tasks-vision";
 import { createGestureRecognizer, processGestureVideo } from "../../lib/mediapipe";
 import { GestureType } from "@/app/types";
 
-interface UseGestureProps {
-  onHandDetected: (categoryNames: GestureType[]) => void
-}
-export const useGesture = ({onHandDetected}: UseGestureProps ) => {
+
+export const useGesture = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const gestureRecognizerRef = useRef<GestureRecognizer | null>(null);
+  const [gestureTypes, setGestureTypes] = useState<GestureType[]>([])
 
   useEffect(() => {
     let isMounted = true;
+
+    const onHandDetected = (result: GestureType[]) => {
+      setGestureTypes(result);
+    }
 
     const initializeMediapipe = async () => {
       try {
@@ -23,8 +26,8 @@ export const useGesture = ({onHandDetected}: UseGestureProps ) => {
         // Assign video stream to the video element (existing ref)
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
-          videoRef.current.width = 320;
-          videoRef.current.height = 240;
+          videoRef.current.width = 640;
+          videoRef.current.height = 480;
           videoRef.current.autoplay = true;
           videoRef.current.playsInline = true;
 
@@ -60,5 +63,5 @@ export const useGesture = ({onHandDetected}: UseGestureProps ) => {
 
   }, []);
 
-  return { videoRef, canvasRef };
+  return { videoRef, canvasRef, gestureTypes };
 };

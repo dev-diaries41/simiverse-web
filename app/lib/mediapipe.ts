@@ -87,8 +87,8 @@ export async function createGestureRecognizer(gestureRecognizerOptions: GestureR
         },
         numHands: 2,
         runningMode: "VIDEO",
-        minHandDetectionConfidence: 0.9,
-        minHandPresenceConfidence:0.9,
+        minHandDetectionConfidence: 0.6,
+        minHandPresenceConfidence:0.6,
         ...gestureRecognizerOptions //allow override
         }
     );

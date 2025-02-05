@@ -31,27 +31,26 @@ export default function Simulation() {
     reset,
   } = useSimulation();
 
-  const [isDataPanelExpanded, setDataPanelExpanded] = useState(false);
   const { showSettings } = useSettings();
-  const { actions, isMinimized, isDataPanelVisible, toggleDataPanel } = useControlMenu();
-  const globeContainerRef = useRef<HTMLDivElement | null>(null);
+  const { actions, isMinimized, isDataPanelVisible, isDataPanelExpanded, toggleDataPanel, toggleDataPanelExpansion } = useControlMenu();
+  const { canvasRef, videoRef, gestureTypes } = useGesture();
   const { loading, setLoading } = useLoading(true);
-  const [gestureTypes, setGestureTypes] = useState<GestureType[]>([])
-  const isStartSimGesuture = gestureTypes[0] === 'Open_Palm' && gestureTypes[1] === 'Open_Palm'
+  const globeContainerRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    if(isStartSimGesuture && !isRunning){
+  const onGestureChange = () => {
+    if(gestureTypes[0] === 'Open_Palm' && gestureTypes[1] === 'Open_Palm' && !isRunning){
       reset();
       startSimulation();
+    }else if(gestureTypes[0] === 'Closed_Fist' && gestureTypes[1] === 'Open_Palm'){
+      toggleDataPanel()
+    }else if(gestureTypes[0] === "Pointing_Up" && gestureTypes[1] === "Pointing_Up"){
+      toggleDataPanelExpansion();
     }
-  }, [isStartSimGesuture]);
+  }
 
-  const { canvasRef, videoRef } = useGesture({
-    onHandDetected: (result) => {
-      setGestureTypes(result);
-    }
-  });
-
+  useEffect(() => {
+    onGestureChange()
+  }, [gestureTypes]);
 
   return (
     <div className="w-full h-full flex flex-row relative">
@@ -95,7 +94,7 @@ export default function Simulation() {
         isLive={isRunning}
         outcomes={outcomes}
         onClose={toggleDataPanel}
-        onExpandToggle={() => setDataPanelExpanded((prev) => !prev)}
+        onExpandToggle={toggleDataPanelExpansion}
         downloadLink={downloadLink}
       />
       <ControlMenu actions={actions} isMinimized={isMinimized}>
@@ -122,8 +121,8 @@ export default function Simulation() {
       </ControlMenu>
       <video
         ref={videoRef}
-        width={320}
-        height={240}
+        width={640}
+        height={480}
         autoPlay
         muted
         className="fixed bottom-0 z-[100]"
@@ -131,8 +130,8 @@ export default function Simulation() {
       />
       <canvas
         ref={canvasRef}
-        width={320}
-        height={240}
+        width={640}
+        height={480}
         className="fixed bottom-0 z-[101]"
         style={{
           pointerEvents: 'none',
