@@ -12,7 +12,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlayCircle } from '@fortawesome/free-solid-svg-icons';
 import { useLoading } from '@/app/hooks';
 import { useGesture } from '@/app/hooks/mediapipe/useGesture';
-import { GestureType } from '@/app/types';
 
 const backgroundImages = [
   '/background.jpg',
@@ -41,7 +40,7 @@ export default function Simulation() {
     if(gestureTypes[0] === 'Open_Palm' && gestureTypes[1] === 'Open_Palm' && !isRunning){
       reset();
       startSimulation();
-    }else if(gestureTypes[0] === 'Closed_Fist' && gestureTypes[1] === 'Open_Palm'){
+    }else if(gestureTypes[0] === 'Closed_Fist' && gestureTypes[1] === 'Closed_Fist'){
       toggleDataPanel()
     }else if(gestureTypes[0] === "Pointing_Up" && gestureTypes[1] === "Pointing_Up"){
       toggleDataPanelExpansion();
@@ -121,8 +120,8 @@ export default function Simulation() {
       </ControlMenu>
       <video
         ref={videoRef}
-        width={640}
-        height={480}
+        width={320}
+        height={240}
         autoPlay
         muted
         className="fixed bottom-0 z-[100]"
@@ -130,8 +129,8 @@ export default function Simulation() {
       />
       <canvas
         ref={canvasRef}
-        width={640}
-        height={480}
+        width={320}
+        height={240}
         className="fixed bottom-0 z-[101]"
         style={{
           pointerEvents: 'none',

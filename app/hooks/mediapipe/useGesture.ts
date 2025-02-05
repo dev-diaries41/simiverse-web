@@ -26,8 +26,8 @@ export const useGesture = () => {
         // Assign video stream to the video element (existing ref)
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
-          videoRef.current.width = 640;
-          videoRef.current.height = 480;
+          videoRef.current.width = 320;
+          videoRef.current.height = 240;
           videoRef.current.autoplay = true;
           videoRef.current.playsInline = true;
 
