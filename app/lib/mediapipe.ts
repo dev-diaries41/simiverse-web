@@ -107,7 +107,7 @@ export async function processGestureVideo ({
   videoElement: HTMLVideoElement | null;
   canvasElement: HTMLCanvasElement | null;
   isMounted: boolean;
-  onHandDetected: (categoryNames: GestureType[]) => void; // Change to handle multiple gestures
+  onHandDetected: (categoryNames: GestureType[]) => void;
 }) {
   if (gestureRecognizer && videoElement && videoElement.readyState === 4 && isMounted) {
     const ctx = canvasElement?.getContext("2d");
@@ -137,15 +137,20 @@ export async function processGestureVideo ({
               );
               drawingUtils.drawLandmarks(landmarks, { color: "#00FF00", radius: 3, lineWidth: 3 });
 
-              // Display text for each hand
+              const fingerTip = landmarks[9]; 
+              const x = fingerTip.x * canvasElement.width;
+              const y = fingerTip.y * canvasElement.height;
+
+              // Display text above the hand
               ctx.font = "16px Arial";
               ctx.fillStyle = "#FF0000";
-              ctx.fillText(categoryName, 10, 30 + i * 20); // Offset text for multiple hands
+              ctx.textAlign = "center";
+              ctx.fillText(categoryName, x, y - 20);
             }
           }
         }
 
-        onHandDetected(detectedGestures); // Send array of detected gestures
+        onHandDetected(detectedGestures);
       } else {
         console.warn('No gesture results');
       }

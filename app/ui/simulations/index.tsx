@@ -40,7 +40,7 @@ export default function Simulation() {
   const { canvasRef, videoRef } = useGesture({
     onHandDetected: (result) => {
       setGestureTypes(result);
-      if(result[0] === 'Open_Palm' && result[1] === 'Open_Palm'){
+      if(result[0] === 'Open_Palm' && result[1] === 'Open_Palm' && !isRunning){
         reset();
         startSimulation();      
       }

@@ -7,8 +7,7 @@ interface UseGestureProps {
   onHandDetected: (categoryNames: GestureType[]) => void
 }
 export const useGesture = ({onHandDetected}: UseGestureProps ) => {
-  
-      const videoRef = useRef<HTMLVideoElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const gestureRecognizerRef = useRef<GestureRecognizer | null>(null);
 
@@ -49,13 +48,16 @@ export const useGesture = ({onHandDetected}: UseGestureProps ) => {
 
     initializeMediapipe();
 
-    return () => {
-      isMounted = false;
-      gestureRecognizerRef.current?.close();
-      if (videoRef.current) {
-        videoRef.current.srcObject = null;
-      }
-    };
+   return () => {
+  isMounted = false;
+  gestureRecognizerRef.current?.close();
+  if (videoRef.current && videoRef.current.srcObject) {
+    const tracks = (videoRef.current.srcObject as MediaStream).getTracks();
+    tracks.forEach(track => track.stop()); // Stop the video stream properly
+    videoRef.current.srcObject = null;
+  }
+};
+
   }, []);
 
   return { videoRef, canvasRef };
