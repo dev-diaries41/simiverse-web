@@ -40,9 +40,20 @@ export default function Simulation() {
     if(gestureTypes[0] === 'Open_Palm' && gestureTypes[1] === 'Open_Palm' && !isRunning){
       reset();
       startSimulation();
-    }else if(gestureTypes[0] === 'Closed_Fist' && gestureTypes[1] === 'Closed_Fist'){
-      toggleDataPanel()
-    }else if(gestureTypes[0] === "Pointing_Up" && gestureTypes[1] === "Pointing_Up"){
+    // open panel
+  } else if ((gestureTypes[0] === 'Open_Palm' || gestureTypes[1] === 'Open_Palm') && (gestureTypes[0] === 'Closed_Fist' || gestureTypes[1] === 'Closed_Fist') && !isDataPanelVisible) {
+    toggleDataPanel();
+    }
+    // close panel
+    else if(gestureTypes[0] === 'Closed_Fist' && gestureTypes[1] === 'Closed_Fist' && isDataPanelVisible){
+      toggleDataPanel();
+    }
+    // expand panel
+    else if(gestureTypes[0] === "Pointing_Up" && gestureTypes[1] === "Pointing_Up" && !isDataPanelExpanded){
+      toggleDataPanelExpansion();
+    }
+    // minimize panel
+    else if ((gestureTypes[0] === "Closed_Fist" || gestureTypes[1] === "Closed_Fist") && (gestureTypes[0] === "Pointing_Up" || gestureTypes[1] === "Pointing_Up") && isDataPanelExpanded) {
       toggleDataPanelExpansion();
     }
   }

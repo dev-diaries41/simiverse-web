@@ -97,24 +97,24 @@ export function useGestureOrbitControls({
 
     const [gestureTypeOne, gestureTypeTwo] = gestureTypes;
 
-    switch (gestureTypeOne) {
-      case "Thumb_Up":
+    switch (true) {
+      case gestureTypeOne === "Thumb_Up" && (gestureTypeTwo ===('None') || !gestureTypeTwo):
         startHoldingKey("ArrowUp");
         break;
-      case "Thumb_Down":
-        startHoldingKey("ArrowDown");
+      case gestureTypeOne === "Thumb_Down" && (gestureTypeTwo ===('None') || !gestureTypeTwo):
+          startHoldingKey("ArrowDown");
         break;
-      case "Pointing_Up":
+      case gestureTypeOne === "Pointing_Up" && (gestureTypeTwo ===('None') || !gestureTypeTwo):
         startHoldingKey("ArrowRight");
         break;
-      case "ILoveYou":
+      case gestureTypeOne === "ILoveYou" && (gestureTypeTwo ===('None') || !gestureTypeTwo):
         startHoldingKey("ArrowLeft");
         break;
-      case "Open_Palm":
+      case gestureTypeOne === "Open_Palm" && (gestureTypeTwo ===('None') || !gestureTypeTwo):
         zoomIn()
         break;
-      case "Closed_Fist":
-        zoomOut()
+      case gestureTypeOne === "Closed_Fist" && (gestureTypeTwo ===('None') || !gestureTypeTwo):
+          zoomOut()
         break;
       default:
         stopHoldingKey();
