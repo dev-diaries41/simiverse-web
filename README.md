@@ -1,8 +1,8 @@
 # Simiverse-Web: Web Client for Simiverse
 
-## Overview
-
 **Simiverse-Web** is the web-based client for the **Simiverse** simulation framework. It provides an interactive interface for running, visualizing, and managing simulations. 
+
+![Orbit Gesture Controls](public_assets/gestures-h.gif) ![Simulation and Data Panel Gesture Controls](public_assets/gestures2-h.gif)
 
 ---
 
