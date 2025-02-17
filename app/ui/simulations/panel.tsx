@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faExpand, faTimes } from "@fortawesome/free-solid-svg-icons";
-import React, { useState, useRef, ReactNode } from "react";
+import React, { useState, useRef, ReactNode, memo } from "react";
 import { useDraggable } from "@/app/hooks/useDraggable";
 import ChartsWrapper from "./charts-wrapper";
 import { SurvivalStats } from "simiverse";
@@ -16,7 +16,7 @@ interface DataPanelProps {
 }
 
 // Main Component
-export default function SidePanel({
+export const SidePanel= memo(({
     isVisible,
     isExpanded,
     onClose,
@@ -24,7 +24,7 @@ export default function SidePanel({
     isLive,
     downloadLink,
     outcomes
-}: DataPanelProps) {
+}: DataPanelProps) =>{
     // if (!isVisible) return null;
 
     const { width: panelWidth, handleMouseDown } = useDraggable(500);
@@ -86,4 +86,4 @@ export default function SidePanel({
             )}
         </div>
     );
-}
+})

@@ -4,7 +4,7 @@ import { useSimulation } from '@/app/hooks/useSimulation';
 import Globe from './globe';
 import ControlMenu from '../common/control-menu';
 import Settings from '../common/settings';
-import SidePanel from './panel';
+import {SidePanel} from './panel';
 import { useSettings } from '@/app/providers/settings';
 import useControlMenu from '@/app/hooks/useControlMenu';
 import Stats from './stats';
